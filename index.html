@@ -1,396 +1,67 @@
 <!doctype html>
-
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Cake & Bakery Recipes</title>
-  <style>
-    :root{--bg:#fff9f5;--card:#ffffff;--muted:#666;--accent:#c94a3d}
-    body{font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial; background:var(--bg); margin:0;color:#222}
-    header{background:linear-gradient(90deg,#fff 60%, rgba(201,74,61,0.06));padding:28px 20px;border-bottom:1px solid rgba(0,0,0,0.06)}
-    .container{max-width:1100px;margin:24px auto;padding:0 20px}
-    h1{margin:0 0 6px 0;font-size:28px}
-    p.lead{margin:0;color:var(--muted)}
-    .controls{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}
-    .card{background:var(--card);border-radius:12px;padding:16px;box-shadow:0 6px 18px rgba(0,0,0,0.06)}
-    .search{flex:1;min-width:220px}
-    input,select,button{font-size:14px;padding:8px 10px;border-radius:8px;border:1px solid #eee}
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-top:20px}
-    .recipe{padding:12px;border-radius:10px}
-    .recipe h3{margin:0 0 6px 0}
-    .meta{font-size:13px;color:var(--muted);margin-bottom:8px}
-    .tag{display:inline-block;background:rgba(0,0,0,0.06);padding:4px 8px;border-radius:999px;font-size:12px;margin-right:6px;margin-bottom:6px}
-    .recipe .ingredients{font-size:14px}
-    .split{display:flex;gap:16px;align-items:flex-start}
-    .left{flex:1}
-    .right{width:360px}
-    @media(max-width:900px){.split{flex-direction:column}.right{width:100%}}
-    .servings{display:flex;align-items:center;gap:10px}
-    .ingredient{margin:6px 0}
-    .steps{margin-top:8px}
-    footer{padding:20px;text-align:center;color:var(--muted);font-size:13px;margin-top:40px}
-    .small{font-size:13px;color:var(--muted)}
-  </style>
+  <title>Recipe Box — Home</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <div class="container">
-      <h1>Recipe Box — Cakes & Bakery (English)</h1>
-      <p class="lead">Browse, filter and adjust servings. All content presented in English. Change the number of servings to automatically scale ingredient quantities.</p>
-      <div class="controls">
-        <div class="card search">
-          <input id="searchInput" placeholder="Search recipes or ingredients..." style="width:100%" />
-        </div>
-        <div class="card">
-          <label for="categorySelect" class="small">Filter by category</label><br>
-          <select id="categorySelect">
-            <option value="all">All categories</option>
-          </select>
-        </div>
-        <div class="card">
-          <label class="small">Sort</label><br>
-          <select id="sortSelect">
-            <option value="default">Default</option>
-            <option value="time">Prep time</option>
-            <option value="name">Name (A–Z)</option>
-          </select>
-        </div>
+  <header class="topbar">
+    <button id="menuBtn" aria-label="Open menu">☰</button>
+    <h1>Recipe Box</h1>
+  </header>
+
+  <nav id="mobileMenu" class="menu hidden">
+    <a href="index.html">Home</a>
+    <a href="category.html?cat=French%20Recipes">French Recipes</a>
+    <a href="category.html?cat=Quick%20%26%20Easy">Quick &amp; Easy</a>
+    <a href="category.html?cat=Chocolate%20Lovers">Chocolate Lovers</a>
+  </nav>
+
+  <main class="container">
+    <section class="hero card">
+      <h2>Delicious cakes & bakery recipes</h2>
+      <p class="muted">Browse by category and tap a recipe to view details. Adjust servings on recipe pages.</p>
+    </section>
+
+    <section class="categories card">
+      <h3>Categories</h3>
+      <div class="cat-grid">
+        <a class="cat-card" href="category.html?cat=French%20Recipes">French Recipes</a>
+        <a class="cat-card" href="category.html?cat=Quick%20%26%20Easy">Quick &amp; Easy</a>
+        <a class="cat-card" href="category.html?cat=Chocolate%20Lovers">Chocolate Lovers</a>
+        <a class="cat-card" href="category.html?cat=Classic%20Cakes">Classic Cakes</a>
+        <a class="cat-card" href="category.html?cat=Cupcakes%20%26%20Muffins">Cupcakes &amp; Muffins</a>
+        <a class="cat-card" href="category.html?cat=Celebration%20Cakes">Celebration Cakes</a>
       </div>
-    </div>
-  </header>  <main class="container">
-    <div class="split">
-      <div class="left">
-        <div id="recipesGrid" class="grid"></div>
-      </div><aside class="right">
-    <div class="card">
-      <h3>Recipe details</h3>
-      <p class="small">Select a recipe to see ingredients and directions. Use the "Servings" input to adjust quantities.</p>
-      <div style="margin-top:12px">
-        <label class="small">Servings (parts)</label>
-        <div class="servings" style="margin-top:6px">
-          <input id="servingsInput" type="number" min="1" value="1" style="width:80px" />
-          <button id="resetServings">Reset</button>
-        </div>
-      </div>
-      <hr style="margin:12px 0">
-      <div id="recipeDetailArea">
-        <p class="small">No recipe selected yet.</p>
-      </div>
-    </div>
+    </section>
 
-    <div style="height:12px"></div>
-    <div class="card">
-      <h4>Categories</h4>
-      <div id="categoryList" style="margin-top:8px"></div>
-    </div>
-  </aside>
-</div>
+    <section class="featured card">
+      <h3>Featured</h3>
+      <div id="featuredList"></div>
+    </section>
 
-  </main>  <footer>
-    Built with ❤️ — interactive servings and category filters. Data loaded from embedded recipes.
-  </footer><script>
-// --- Recipe dataset (cleaned & converted to English) ---
-const RECIPES = [
-  {
-    id: 'brownies',
-    title: 'Classic Chocolate Brownies',
-    categories: ['Classic Cakes','Chocolate Lovers','Quick & Easy'],
-    yieldParts: 12, // yields 12 portions
-    serves: 5,
-    prep: '10 mins',
-    bake: '20-25 mins',
-    total: '35 mins',
-    difficulty: 'Easy',
-    ingredients: [
-      '1 cup unsweetened cocoa powder',
-      '1 1/2 cups granulated sugar',
-      '1/2 cup unsalted butter (melted)',
-      '3 large eggs',
-      '1 cup all-purpose flour',
-      '2 tsp vanilla extract',
-      '1/2 tsp salt',
-      '1/2 cup chocolate chips (optional)'
-    ],
-    steps: [
-      'Preheat oven to 350°F (175°C) and grease an 8x8-inch baking pan.',
-      'In a saucepan over low heat, melt the butter. Stir in sugar until well combined.',
-      'Remove from heat and whisk in eggs one at a time, followed by vanilla extract.',
-      'In a separate bowl, sift together cocoa powder, flour, and salt.',
-      'Gradually fold the dry mixture into the wet mixture; avoid overmixing.',
-      'Add chocolate chips if desired, then pour batter into the prepared pan.',
-      'Bake for 20-25 minutes or until a toothpick comes out with moist crumbs.'
-    ]
-  },
-  {
-    id: 'baguette',
-    title: 'Traditional French Baguettes (6 loaves)',
-    categories: ['French Recipes','Classic Cakes'],
-    yieldParts: 6,
-    prep: '30 mins',
-    bake: '20 min',
-    rest: '3h 30m',
-    total: '4h 20m',
-    difficulty: 'Intermediate',
-    ingredients: [
-      '1 kg bread flour (T65 or equivalent)',
-      '700 g water',
-      '16 g fresh yeast (or 8 g active dry yeast)',
-      '22 g salt',
-    ],
-    steps: [
-      'First mixing: in a stand mixer bowl combine flour and water on low speed for 1 minute ("frasage").',
-      'Add salt and mix; add crumbled fresh yeast (if using dry yeast, rehydrate in 50 g warm water before adding). Knead at low speed for 5 minutes. The dough will be loose—this is normal.',
-      'Cover and let rest 20 minutes at room temperature.',
-      'On a floured surface, gently fold the dough by bringing the four corners to the center, return to the bowl and rest 20 minutes. Repeat this folding-rest cycle two more times (total ~1 hour of bulk fermentation).',
-      'After bulk fermentation, shape into a ball and let rise 2 hours at ~20°C until doubled.',
-      'Divide the dough into 6 equal pieces. Shape into baguettes, rest 10 minutes under a cloth, then shape again to form baguettes.',
-      'Preheat oven to 250°C with a tray of water in the bottom (steam). Let baguettes proof 30 minutes (final proof).',
-      'Score (slashes) across each baguette and bake ~15 minutes (adjust to taste). Cool before slicing.'
-    ]
-  },
-  {
-    id: 'painsauchoc',
-    title: 'Pain au Chocolat / Croissants (makes ~12)',
-    categories: ['French Recipes','Celebration Cakes'],
-    yieldParts: 12,
-    prep: '1-2 hrs + lamination & overnight rest',
-    bake: '12-15 mins',
-    difficulty: 'Advanced',
-    ingredients: [
-      '500 g all-purpose flour',
-      '20 g fresh baker\'s yeast',
-      '300 g cold butter (for laminating)',
-      '125 ml warm milk',
-      '60 g granulated sugar',
-      '5 g fine salt',
-      '125 ml cold water',
-      'Chocolate batons or bars for filling'
-    ],
-    steps: [
-      'Warm the milk slightly and dissolve the yeast in it. In a bowl, combine flour, salt, sugar, water and the milk+yeast mixture. Mix and knead until elastic.',
-      'Cover and let rise 1–2 hours until doubled. Degas the dough, form a ball, make a shallow cross cut and chill 1 hour.',
-      'Beat the butter into a square between parchment paper and chill. Enclose the butter in the dough and roll into a rectangle ~1 cm thick.',
-      'Fold in thirds, turn 90°, chill 20 minutes. Repeat the fold & chill two more times (lamination). Ideally rest overnight.',
-      'Roll dough thin (~3 mm) and cut rectangles for pain au chocolat or triangles for croissants. Place chocolate, roll, brush with egg wash and proof ~1.5 hours.',
-      'Bake at 180°C for 12–15 minutes until golden. Cool and enjoy.'
-    ]
-  },
-  {
-    id: 'madeleines',
-    title: 'Chocolate-coated Madeleines (10 pieces)',
-    categories: ['Classic Cakes','French Recipes','Quick & Easy'],
-    yieldParts: 10,
-    prep: '15 mins',
-    bake: '10-12 mins',
-    difficulty: 'Easy',
-    ingredients: [
-      '3 large eggs',
-      '150 g granulated sugar',
-      '150 g all-purpose flour',
-      '150 g melted butter',
-      '1 tsp vanilla extract',
-      '100 g dark chocolate (for coating)',
-    ],
-    steps: [
-      'Preheat oven and prepare a greased madeleine pan. Many bakers prefer metal pans for a better rise and golden sides—grease with coconut oil or butter.',
-      'Whisk eggs and sugar until light and fluffy. Fold in flour and melted butter gently, add vanilla.',
-      'Spoon batter into madeleine molds and bake 10–12 minutes until golden and domed.',
-      'Melt dark chocolate and dip cooled madeleines to make a chocolate shell. Let set and serve.'
-    ]
-  }
-];
+  </main>
 
-// --- UI helper: categories set ---
-const ALL_CATEGORIES = [...new Set(RECIPES.flatMap(r=>r.categories))];
+  <footer class="sitefoot">Made with ❤️ — mobile-first recipe site</footer>
 
-// Populate category selects and list
-const categorySelect = document.getElementById('categorySelect');
-const categoryList = document.getElementById('categoryList');
-ALL_CATEGORIES.forEach(cat=>{
-  const opt = document.createElement('option'); opt.value=cat; opt.textContent=cat; categorySelect.appendChild(opt);
-  const span = document.createElement('span'); span.className='tag'; span.textContent=cat; categoryList.appendChild(span);
-});
-
-// --- Helpers to scale ingredient quantities ---
-function parseNumberToken(token){
-  // token may be '1', '1.5', '1/2', '1 1/2'
-  token = token.trim();
-  if(!token) return NaN;
-  if(token.includes(' ')){
-    const parts = token.split(' ');
-    if(parts.length===2 && parts[1].includes('/')){
-      const whole = parseFloat(parts[0]);
-      const frac = parts[1].split('/');
-      return whole + (parseFloat(frac[0])/parseFloat(frac[1]));
-    }
-  }
-  if(token.includes('/')){
-    const frac = token.split('/');
-    return parseFloat(frac[0])/parseFloat(frac[1]);
-  }
-  return parseFloat(token);
-}
-
-function formatNumberForDisplay(n){
-  if(n===Math.floor(n)) return String(n);
-  // try to show halves or quarters nicely
-  const frac = n - Math.floor(n);
-  if(Math.abs(frac-0.5)<0.0001) return Math.floor(n) + ' 1/2';
-  if(Math.abs(frac-0.25)<0.0001) return Math.floor(n) + ' 1/4';
-  if(Math.abs(frac-0.75)<0.0001) return Math.floor(n) + ' 3/4';
-  return (Math.round(n*100)/100).toString();
-}
-
-function scaleIngredientText(text, factor){
-  // Find numeric tokens at start or before units: e.g. '1 cup', '1 1/2 cups', '700 g', '1 kg', '12.5 cl'
-  // We'll search for patterns of numbers (including fractions) and replace them.
-  return text.replace(/(\d+\s\d+\/\d+|\d+\/\d+|\d+\.\d+|\d+)(?=\s*(g|kg|ml|l|cup|cups|tbsp|tsp|teaspoon|tablespoon|cl|cup\)|cups\)|g\)|kg\)|))?/i, (match)=>{
-    const num = parseNumberToken(match);
-    if(isNaN(num)) return match;
-    const scaled = num * factor;
-    return formatNumberForDisplay(Math.round((scaled + Number.EPSILON) * 100) / 100);
-  });
-}
-
-// For metric-only values with g/kg or ml etc anywhere in the string
-function scaleAnyNumberInString(text, factor){
-  return text.replace(/(\d+\s\d+\/\d+|\d+\/\d+|\d+\.\d+|\d+)/g, (m)=>{
-    const num = parseNumberToken(m);
-    if(isNaN(num)) return m;
-    // avoid scaling numbers that look like years (not relevant here)
-    const scaled = num * factor;
-    return formatNumberForDisplay(Math.round((scaled + Number.EPSILON) * 100) / 100);
-  });
-}
-
-// --- Rendering ---
-const recipesGrid = document.getElementById('recipesGrid');
-const recipeDetailArea = document.getElementById('recipeDetailArea');
-const servingsInput = document.getElementById('servingsInput');
-const resetServingsBtn = document.getElementById('resetServings');
-let selectedRecipe = null;
-let currentTargetServings = 1; // default
-
-function renderRecipeCard(recipe){
-  const card = document.createElement('div'); card.className='card recipe';
-  const title = document.createElement('h3'); title.textContent=recipe.title; card.appendChild(title);
-  const meta = document.createElement('div'); meta.className='meta';
-  meta.innerHTML = `<strong>Yield:</strong> ${recipe.yieldParts} parts • <strong>Difficulty:</strong> ${recipe.difficulty || '—'}`;
-  card.appendChild(meta);
-  const tagWrap = document.createElement('div');
-  recipe.categories.forEach(t=>{ const s=document.createElement('span'); s.className='tag'; s.textContent=t; tagWrap.appendChild(s)});
-  card.appendChild(tagWrap);
-  const btn = document.createElement('button'); btn.textContent='View'; btn.style.marginTop='10px';
-  btn.onclick = ()=>{ selectRecipe(recipe); }
-  card.appendChild(btn);
-  return card;
-}
-
-function renderGrid(list){
-  recipesGrid.innerHTML='';
-  if(list.length===0){ recipesGrid.innerHTML='<div class="card">No recipes match your filters.</div>'; return }
-  list.forEach(r=>recipesGrid.appendChild(renderRecipeCard(r)));
-}
-
-function selectRecipe(recipe){
-  selectedRecipe = recipe;
-  // set servings input default to recipe.yieldParts if available
-  currentTargetServings = recipe.yieldParts || 1;
-  servingsInput.value = currentTargetServings;
-  updateDetailArea();
-}
-
-function updateDetailArea(){
-  if(!selectedRecipe){ recipeDetailArea.innerHTML='<p class="small">No recipe selected yet.</p>'; return }
-  const r = selectedRecipe;
-  const container = document.createElement('div');
-  const title = document.createElement('h3'); title.textContent=r.title; container.appendChild(title);
-  const meta = document.createElement('div'); meta.className='meta';
-  meta.innerHTML = `<strong>Yield:</strong> ${r.yieldParts || '—'} parts • <strong>Prep:</strong> ${r.prep || '—'} • <strong>Bake:</strong> ${r.bake || '—'}`;
-  container.appendChild(meta);
-  // Ingredients
-  const ingTitle = document.createElement('h4'); ingTitle.textContent='Ingredients'; ingTitle.style.marginTop='10px'; container.appendChild(ingTitle);
-  const list = document.createElement('div'); list.className='ingredients';
-  const factor = computeScaleFactor(r);
-  r.ingredients.forEach(ing=>{
-    const div = document.createElement('div'); div.className='ingredient';
-    // attempt to scale numbers intelligently: first try scaleIngredientText (handles front numeric tokens)
-    let scaled = scaleIngredientText(ing, factor);
-    // if no numbers changed (e.g. metric like '700 g'), fallback to scaling any number
-    if(scaled === ing) scaled = scaleAnyNumberInString(ing, factor);
-    div.textContent = scaled;
-    list.appendChild(div);
-  });
-  container.appendChild(list);
-  // Steps
-  const stepsTitle = document.createElement('h4'); stepsTitle.textContent='Directions'; stepsTitle.style.marginTop='10px'; container.appendChild(stepsTitle);
-  const ol = document.createElement('ol'); ol.className='steps';
-  r.steps.forEach(s=>{ const li=document.createElement('li'); li.textContent=s; ol.appendChild(li)});
-  container.appendChild(ol);
-  recipeDetailArea.innerHTML=''; recipeDetailArea.appendChild(container);
-}
-
-function computeScaleFactor(recipe){
-  const target = Number(servingsInput.value) || 1;
-  const base = recipe.yieldParts || 1;
-  const factor = target / base;
-  return factor;
-}
-
-servingsInput.addEventListener('input', ()=>{
-  if(!selectedRecipe) return;
-  updateDetailArea();
-});
-resetServingsBtn.addEventListener('click', ()=>{
-  if(!selectedRecipe) return;
-  servingsInput.value = selectedRecipe.yieldParts || 1;
-  updateDetailArea();
-});
-
-// --- Filtering & search ---
-const searchInput = document.getElementById('searchInput');
-const sortSelect = document.getElementById('sortSelect');
-
-function applyFilters(){
-  const q = searchInput.value.trim().toLowerCase();
-  const cat = categorySelect.value;
-  let list = RECIPES.filter(r=>{
-    if(cat!=='all' && !r.categories.includes(cat)) return false;
-    if(!q) return true;
-    const hay = (r.title + ' ' + r.ingredients.join(' ') + ' ' + (r.steps||[]).join(' ')).toLowerCase();
-    return hay.includes(q);
-  });
-  // sort
-  const sortBy = sortSelect.value;
-  if(sortBy==='time'){
-    // crude sort: recipes with shorter prep time first (we parse numbers from prep)
-    list.sort((a,b)=>parseTimeMinutes(a.prep)-parseTimeMinutes(b.prep));
-  } else if(sortBy==='name'){
-    list.sort((a,b)=>a.title.localeCompare(b.title));
-  }
-  renderGrid(list);
-}
-
-function parseTimeMinutes(s){
-  if(!s) return 9999;
-  const m = s.match(/(\d+)\s*min/);
-  if(m) return parseInt(m[1]);
-  const h = s.match(/(\d+)\s*h/);
-  if(h) return parseInt(h[1])*60;
-  return 9999;
-}
-
-searchInput.addEventListener('input', applyFilters);
-categorySelect.addEventListener('change', applyFilters);
-sortSelect.addEventListener('change', applyFilters);
-
-// --- Init ---
-renderGrid(RECIPES);
-applyFilters();
-
-// Auto-select first recipe for convenience
-selectRecipe(RECIPES[0]);
-
-</script></body>
+  <script src="script.js"></script>
+  <script>
+    // menu toggle
+    document.getElementById('menuBtn').addEventListener('click', ()=>{
+      document.getElementById('mobileMenu').classList.toggle('hidden');
+    });
+    // render a few featured recipes (client-side)
+    const featured = ['brownies','madeleines','baguette'];
+    const list = document.getElementById('featuredList');
+    featured.forEach(id=>{
+      const r = RECIPES.find(x=>x.id===id);
+      if(!r) return;
+      const a = document.createElement('a'); a.className='recipe-mini'; a.href = 'recipe.html?id='+r.id;
+      a.innerHTML = `<strong>${r.title}</strong><div class="muted small">${r.categories.join(' • ')}</div>`;
+      list.appendChild(a);
+    });
+  </script>
+</body>
 </html>
