@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Recipe</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a href="javascript:history.back()" class="back">←</a>
+    <h1 id="rTitle">Recipe</h1>
+    <button id="menuBtn" aria-label="Open menu">☰</button>
+  </header>
+
+  <nav id="mobileMenu" class="menu hidden">
+    <a href="index.html">Home</a>
+  </nav>
+
+  <main class="container">
+    <article class="card" id="recipeCard">
+      <div id="heroImg" class="hero-img">Image</div>
+      <h2 id="title">Recipe Title</h2>
+      <div class="muted small" id="meta"></div>
+
+      <div class="servings-row">
+        <label>Servings (parts)</label>
+        <div class="serv-controls">
+          <input id="servingsInput" type="number" min="1" value="1" />
+          <button id="resetBtn">Reset</button>
+        </div>
+      </div>
+
+      <h3>Ingredients</h3>
+      <div id="ingredients"></div>
+
+      <h3>Directions</h3>
+      <ol id="steps"></ol>
+    </article>
+  </main>
+
+  <footer class="sitefoot">Use the servings control to scale ingredients.</footer>
+
+  <script src="script.js"></script>
+  <script>
+    // menu toggle
+    document.getElementById('menuBtn').addEventListener('click', ()=>{
+      document.getElementById('mobileMenu').classList.toggle('hidden');
+    });
+
+    // load recipe by id
+    const params = new URLSearchParams(location.search);
+    const id = params.get('id') || 'brownies';
+    const recipe = RECIPES.find(r=>r.id===id);
+    const title = document.getElementById('title');
+    title.textContent = recipe.title;
+    document.getElementById('rTitle').textContent = recipe.title;
+    document.getElementById('meta').textContent = (recipe.yieldParts? recipe.yieldParts+' parts • ' : '') + (recipe.difficulty || '');
+    document.getElementById('heroImg').textContent = recipe.title;
+
+    const servingsInput = document.getElementById('servingsInput');
+    servingsInput.value = recipe.yieldParts || 1;
+    const resetBtn = document.getElementById('resetBtn');
+
+    function computeFactor(){
+      const base = recipe.yieldParts || 1;
+      const target = Number(servingsInput.value) || 1;
+      return target / base;
+    }
+
+    function renderIngredients(){
+      const factor = computeFactor();
+      const wrap = document.getElementById('ingredients'); wrap.innerHTML='';
+      recipe.ingredients.forEach(ing=>{
+        const div = document.createElement('div'); div.className='ingredient';
+        const scaled = scaleAnyNumberInString(ing, factor);
+        div.textContent = scaled;
+        wrap.appendChild(div);
+      });
+    }
+
+    function renderSteps(){
+      const ol = document.getElementById('steps'); ol.innerHTML='';
+      recipe.steps.forEach(s=>{ const li=document.createElement('li'); li.textContent=s; ol.appendChild(li); });
+    }
+
+    servingsInput.addEventListener('input', renderIngredients);
+    resetBtn.addEventListener('click', ()=>{ servingsInput.value = recipe.yieldParts || 1; renderIngredients(); });
+
+    renderIngredients(); renderSteps();
+  </script>
+</body>
+</html>
