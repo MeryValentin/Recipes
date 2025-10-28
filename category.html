@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Recipes — Category</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a href="index.html" class="back">←</a>
+    <h1 id="catTitle">Category</h1>
+  </header>
+
+  <main class="container">
+    <input id="search" placeholder="Search..." class="searchbox" />
+    <div id="results" class="grid"></div>
+  </main>
+
+  <footer class="sitefoot">Tap a recipe to view</footer>
+
+  <script src="script.js"></script>
+  <script>
+    const params = new URLSearchParams(location.search);
+    const cat = params.get('cat') || 'All';
+    document.getElementById('catTitle').textContent = decodeURIComponent(cat);
+
+    function renderCategory(){
+      const q = document.getElementById('search').value.trim().toLowerCase();
+      const area = document.getElementById('results'); area.innerHTML='';
+      const list = RECIPES.filter(r=> r.categories.includes(cat));
+      const filtered = list.filter(r=> (r.title+' '+r.ingredients.join(' ')).toLowerCase().includes(q));
+      if(filtered.length===0){ area.innerHTML='<p class="muted">No recipes found.</p>'; return }
+      filtered.forEach(r=>{
+        const a = document.createElement('a'); a.className='recipe-card'; a.href='recipe.html?id='+r.id;
+        a.innerHTML = `<div class="thumb"><img src="images/${r.image}" alt="${r.title}"></div><div class="info"><h3>${r.title}</h3><div class="muted small">${r.yieldParts || ''} parts • ${r.difficulty || ''}</div></div>`;
+        area.appendChild(a);
+      });
+    }
+    document.getElementById('search').addEventListener('input', renderCategory);
+    renderCategory();
+  </script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Recipe Box — Home</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <button id="menuBtn" class="icon">☰</button>
+    <h1>Recipe Box</h1>
+  </header>
+
+  <nav id="mobileMenu" class="menu hidden">
+    <a href="index.html">Home</a>
+    <a href="category.html?cat=French%20Recipes">French</a>
+    <a href="category.html?cat=Quick%20%26%20Easy">Quick</a>
+    <a href="category.html?cat=Chocolate%20Lovers">Chocolate</a>
+  </nav>
+
+  <main class="container">
+    <section class="hero card">
+      <h2>Beautiful, fast recipes</h2>
+      <p class="muted">Modern mobile design • Tap a recipe to open</p>
+    </section>
+
+    <section class="cards">
+      <div id="cardsList" class="grid"></div>
+    </section>
+  </main>
+
+  <footer class="sitefoot">Made with care • Mobile-first</footer>
+
+  <script src="script.js"></script>
+  <script>
+    document.getElementById('menuBtn').addEventListener('click',()=>{
+      document.getElementById('mobileMenu').classList.toggle('hidden');
+    });
+
+    const cardsList = document.getElementById('cardsList');
+    RECIPES.forEach(r=>{
+      const a = document.createElement('a');
+      a.className = 'recipe-card';
+      a.href = 'recipe.html?id='+r.id;
+      a.innerHTML = `
+        <div class="thumb"><img src="images/${r.image}" alt="${r.title}"></div>
+        <div class="info"><h3>${r.title}</h3><div class="muted small">${r.categories.join(' • ')}</div></div>
+      `;
+      cardsList.appendChild(a);
+    });
+  </script>
+</body>
+</html>
