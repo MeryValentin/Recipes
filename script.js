@@ -88,12 +88,11 @@ const RECIPES = [
     steps: [
       'Preheat oven and prepare a greased madeleine pan.',
       'Whisk eggs and sugar until light and fluffy. Fold in flour and melted butter, add vanilla.',
-      'Spoon batter into molds and bake 10–12 minutes. Dip cooled madeleines in melted chocolate.'
+      'Spoon batter into molds and bake 10-12 minutes. Dip cooled madeleines in melted chocolate.'
     ]
   }
 ];
 
-// Number parsing & scaling helpers
 function parseNumberToken(token){
   token = token.trim();
   if(token.includes(' ')){

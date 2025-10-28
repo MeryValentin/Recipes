@@ -20,7 +20,7 @@
     <label>Servings</label>
     <div class="servings-row">
       <input id="servingsInput" type="number" min="1" value="1" />
-      <button id="resetBtn">Reset</button>
+      <button id="resetBtn" class="reset-btn">Reset</button>
     </div>
 
     <h3>Ingredients</h3>
@@ -53,7 +53,7 @@
     function renderSteps(){ const ol = document.getElementById('steps'); ol.innerHTML=''; recipe.steps.forEach(s=>{ const li = document.createElement('li'); li.textContent = s; ol.appendChild(li); }); }
 
     servingsInput.addEventListener('input', renderIngredients);
-    resetBtn.addEventListener('click', ()=>{ servingsInput.value = recipe.yieldParts || 1; renderIngredients(); });
+    resetBtn.addEventListener('click', ()=>{ servingsInput.value = recipe.yieldParts || 1; renderIngredients(); resetBtn.classList.add('clicked'); setTimeout(()=>resetBtn.classList.remove('clicked'),260); });
 
     renderIngredients(); renderSteps();
   </script>
