@@ -37,23 +37,29 @@
 
   <footer class="sitefoot">Made with care • Mobile-first</footer>
 
-  <script src="script.js"></script>
-  <script>
-    document.getElementById('menuBtn').addEventListener('click',()=>{
-      document.getElementById('mobileMenu').classList.toggle('hidden');
-    });
+<script src="script.js"></script>
+<script>
+  document.getElementById('menuBtn').addEventListener('click', () => {
+    document.getElementById('mobileMenu').classList.toggle('hidden');
+  });
 
-    const cardsList = document.getElementById('cardsList');
-    RECIPES.forEach(r=>{
-      const a = document.createElement('a');
-      a.className = 'recipe-card';
-      a.href = 'recipe.html?id='+r.id;
-      a.innerHTML = `
-        <div class="thumb"><img src="image/'+recipe.image+'" alt="'+recipe.title+'"></div>
-        <div class="info"><h3>${r.title}</h3><div class="muted small">${r.categories.join(' • ')}</div></div>
-      `;
-      cardsList.appendChild(a);
-    });
-  </script>
+  const cardsList = document.getElementById('cardsList');
+
+  RECIPES.forEach(r => {
+    const a = document.createElement('a');
+    a.className = 'recipe-card';
+    a.href = 'recipe.html?id=' + r.id;
+    a.innerHTML = `
+      <div class="thumb">
+        <img src="image/${r.image}" alt="${r.title}">
+      </div>
+      <div class="info">
+        <h3>${r.title}</h3>
+        <div class="muted small">${r.categories.join(' • ')}</div>
+      </div>
+    `;
+    cardsList.appendChild(a);
+  });
+</script>
 </body>
 </html>
