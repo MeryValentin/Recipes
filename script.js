@@ -6,7 +6,7 @@ const RECIPES = [
     categories: ['Classic Cakes','Chocolate Lovers','Quick & Easy'],
     yieldParts: 12,
     difficulty: 'Easy',
-    image: 'brownies.jpg',
+    image: 'image/brownies.jpg',
     ingredients: [
       '1 cup unsweetened cocoa powder',
       '1 1/2 cups granulated sugar',
