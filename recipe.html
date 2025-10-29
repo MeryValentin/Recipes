@@ -39,7 +39,7 @@
     document.getElementById('title').textContent = recipe.title;
     document.getElementById('rTitle').textContent = recipe.title;
     document.getElementById('meta').textContent = (recipe.yieldParts? recipe.yieldParts+' parts • ':'') + (recipe.difficulty || '');
-    document.getElementById('hero').innerHTML = '<img src="images/'+recipe.image+'" alt="'+recipe.title+'">';
+    document.getElementById('hero').innerHTML = '<img src="image/'+recipe.image+'" alt="'+recipe.title+'">';
 
     const servingsInput = document.getElementById('servingsInput');
     servingsInput.value = recipe.yieldParts || 1;
